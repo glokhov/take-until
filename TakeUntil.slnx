@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="TakeUntil\src\TakeUntil\TakeUntil.fsproj" Type="Classic F#" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="TakeUntil\test\TakeUntil.Tests\TakeUntil.Tests.fsproj" Type="Classic F#" />
+  </Folder>
+</Solution>
