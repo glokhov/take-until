@@ -2,10 +2,16 @@ namespace TakeUntil
 
 module Seq =
 
+    let inline checkNonNull (argName: string) (arg: 'T) : unit =
+        if isNull arg then
+            nullArg argName
+
     [<CompiledName("TakeUntil")>]
-    let takeUntil (predicate: 'T -> bool) (sequence: 'T seq) : 'T seq =
+    let takeUntil (predicate: 'T -> bool) (source: 'T seq) : 'T seq =
+        checkNonNull "source" source
+
         seq {
-            use e = sequence.GetEnumerator()
+            use e = source.GetEnumerator()
 
             let mutable current = Unchecked.defaultof<_>
             let mutable ok = true

@@ -4,7 +4,7 @@
         <LangVersion>preview</LangVersion>
         <Authors>Gennadiy Lokhov</Authors>
         <Copyright>Copyright © Gennadiy Lokhov</Copyright>
-        <Description></Description>
+        <Description>F# implementation of a takeUntil function</Description>
         <PackageId>TakeUntil</PackageId>
         <PackageTags>fsharp;takeuntil;take;until</PackageTags>
         <PackageProjectUrl>https://github.com/glokhov/take-until</PackageProjectUrl>
@@ -12,12 +12,16 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <RepositoryType>git</RepositoryType>
         <RepositoryUrl>https://github.com/glokhov/take-until.git</RepositoryUrl>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <Version>0.1.0</Version>
     </PropertyGroup>
     <ItemGroup>
         <None Include="../../../README.md" Pack="true" Visible="false" PackagePath="/" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="take-until.fsi" />
         <Compile Include="take-until.fs" />
     </ItemGroup>
 </Project>
