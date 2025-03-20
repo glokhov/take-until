@@ -2,6 +2,7 @@ namespace TakeUntil
 
 module Seq =
 
+    [<CompiledName("TakeUntil")>]
     let takeUntil (predicate: 'T -> bool) (sequence: 'T seq) : 'T seq =
         seq {
             use e = sequence.GetEnumerator()
@@ -17,14 +18,16 @@ module Seq =
 
 module List =
 
+    [<CompiledName("TakeUntil")>]
     let takeUntil (predicate: 'T -> bool) (list: 'T list) : 'T list =
         match list |> List.tryFindIndex predicate with
-        | Some ix -> list |> List.take (ix + 1)
         | None -> list
+        | Some ix -> list |> List.take (ix + 1)
 
 module Array =
 
+    [<CompiledName("TakeUntil")>]
     let takeUntil (predicate: 'T -> bool) (array: 'T array) : 'T array =
         match array |> Array.tryFindIndex predicate with
-        | Some ix -> array |> Array.take (ix + 1)
         | None -> array
+        | Some ix -> array |> Array.take (ix + 1)
