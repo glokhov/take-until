@@ -34,6 +34,17 @@ let ``if a sequence has matching element at the start takeUntil returns the fist
     Assert.True([ 1 ] = sequence)
 
 [<Fact>]
+let ``predicate is not called more than necessary (sequence)`` () =
+    let mutable counts = 0
+
+    Seq.singleton 1
+    |> Seq.takeUntil (fun _ -> counts <- counts + 1 ; true)
+    |> Seq.head
+    |> fun x -> Assert.Equal (x, 1)
+
+    Assert.Equal (counts, 0)
+
+[<Fact>]
 let ``if a list is empty takeUntil returns an empty list`` () =
     let list = List.empty |> List.takeUntil (fun x -> x = 0)
     Assert.Empty list
