@@ -82,3 +82,26 @@ let ``if an array has matching element in the middle takeUntil returns an array 
 let ``if an array has matching element at the start takeUntil returns the fist element`` () =
     let array = [| 1..10 |] |> Array.takeUntil (fun x -> x = 1)
     Assert.True([| 1 |] = array)
+
+[<Fact>]
+let ``property-based test: sequence agrees with list model`` () =
+    let pred (x : int) = x % 2 = 0
+    let property (xs : int list) =
+        xs
+        |> Seq.takeUntil pred
+        |> Seq.toList
+        |> (=) (List.takeUntil pred xs)
+
+    FsCheck.Check.QuickThrowOnFailure property
+
+[<Fact>]
+let ``property-based test: sequence agrees with array model`` () =
+    let pred (x : int) = x % 2 = 0
+    let property (xs : FsCheck.NonNull<int[]>) =
+        let xs = xs.Get
+        xs
+        |> Seq.takeUntil pred
+        |> Seq.toArray
+        |> (=) (Array.takeUntil pred xs)
+
+    FsCheck.Check.QuickThrowOnFailure property
