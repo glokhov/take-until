@@ -18,8 +18,8 @@ module Seq =
 
             while ok && e.MoveNext() do
                 current <- e.Current
-                ok <- not <| predicate current
                 yield current
+                ok <- not <| predicate current
         }
 
 module List =
