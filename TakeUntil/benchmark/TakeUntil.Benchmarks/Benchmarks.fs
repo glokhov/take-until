@@ -4,7 +4,6 @@ open BenchmarkDotNet.Attributes
 
 [<MemoryDiagnoser>]
 type Benchmarks() =
-
     let sequence = seq { 1..1000 }
     let list = [ 1..1000 ]
     let array = [| 1..1000 |]

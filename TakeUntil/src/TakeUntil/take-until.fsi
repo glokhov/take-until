@@ -1,7 +1,6 @@
 namespace TakeUntil
 
 module Seq =
-
     /// <summary>Returns a sequence that, when iterated, yields elements of the underlying sequence until the
     /// given predicate returns True, and then returns no further elements.</summary>
     /// <param name="predicate">A function that evaluates to false when no more items should be returned.</param>
@@ -20,7 +19,6 @@ module Seq =
     val takeUntil: predicate: ('T -> bool) -> source: 'T seq -> 'T seq
 
 module List =
-
     /// <summary>Returns a list that contains all elements of the original list until the
     /// given predicate returns True, and then returns no further elements.</summary>
     /// <param name="predicate">A function that evaluates to false when no more items should be returned.</param>
@@ -38,7 +36,6 @@ module List =
     val takeUntil: predicate: ('T -> bool) -> list: 'T list -> 'T list
 
 module Array =
-
     /// <summary>Returns an array that contains all elements of the original array until the
     /// given predicate returns True, and then returns no further elements.</summary>
     /// <param name="predicate">A function that evaluates to false when no more items should be returned.</param>

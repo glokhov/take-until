@@ -1,11 +1,11 @@
-module TakeUntil.Tests
+module TakeUntilTests
 
 open System
 open TakeUntil
 open Xunit
 
 [<Fact>]
-let ``if sequence is null takeUntil throws an ArgumentNullException`` () =
+let ``if a sequence is null takeUntil throws an ArgumentNullException`` () =
     Assert.Throws<ArgumentNullException>(fun _ -> null |> Seq.takeUntil (fun _ -> true) |> ignore)
 
 [<Fact>]
