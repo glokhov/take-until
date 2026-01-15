@@ -1,118 +1,93 @@
 module TakeUntilTests
 
 open System
+open FsCheck.Xunit
+open FsUnit.Xunit
+open FsUnitTyped
 open TakeUntil
 open Xunit
 
+let even (x: int) : bool = x % 2 = 0
+let zero (x: int) : bool = x = 0
+let one (x: int) : bool = x = 1
+let five (x: int) : bool = x = 5
+let ten (x: int) : bool = x = 10
+
 [<Fact>]
 let ``if a sequence is null takeUntil throws an ArgumentNullException`` () =
-    Assert.Throws<ArgumentNullException>(fun _ -> null |> Seq.takeUntil (fun _ -> true) |> ignore)
+    (fun () -> Seq.takeUntil even null |> ignore) |> should throw typeof<ArgumentNullException>
 
 [<Fact>]
 let ``if a sequence is empty takeUntil returns an empty sequence`` () =
-    let sequence = Seq.empty |> Seq.takeUntil (fun x -> x = 0)
-    Assert.Empty sequence
+    Seq.empty |> Seq.takeUntil zero |> shouldBeEmpty
 
 [<Fact>]
 let ``if a sequence has no matching elements takeUntil returns the full sequence`` () =
-    let sequence = seq { 1..10 } |> Seq.takeUntil (fun x -> x = 0) |> List.ofSeq
-    Assert.True([ 1..10 ] = sequence)
+    seq { 1..10 } |> Seq.takeUntil zero |> Seq.toList |> should equal [ 1..10 ]
 
 [<Fact>]
 let ``if a sequence has matching element at the end takeUntil returns the full sequence`` () =
-    let sequence = seq { 1..10 } |> Seq.takeUntil (fun x -> x = 10) |> List.ofSeq
-    Assert.True([ 1..10 ] = sequence)
+    seq { 1..10 } |> Seq.takeUntil ten |> Seq.toList |> should equal [ 1..10 ]
 
 [<Fact>]
 let ``if a sequence has matching element in the middle takeUntil returns a sequence including matching element`` () =
-    let sequence = seq { 1..10 } |> Seq.takeUntil (fun x -> x = 5) |> List.ofSeq
-    Assert.True([ 1..5 ] = sequence)
+    seq { 1..10 } |> Seq.takeUntil five |> Seq.toList |> should equal [ 1..5 ]
 
 [<Fact>]
 let ``if a sequence has matching element at the start takeUntil returns the fist element`` () =
-    let sequence = seq { 1..10 } |> Seq.takeUntil (fun x -> x = 1) |> List.ofSeq
-    Assert.True([ 1 ] = sequence)
+    seq { 1..10 } |> Seq.takeUntil one |> Seq.toList |> should equal [ 1 ]
 
 [<Fact>]
 let ``predicate is not called more than necessary (sequence)`` () =
     let mutable counts = 0
-
-    Seq.singleton 1
-    |> Seq.takeUntil (fun _ -> counts <- counts + 1 ; true)
-    |> Seq.head
-    |> fun x -> Assert.Equal (x, 1)
-
-    Assert.Equal (counts, 0)
+    Seq.singleton 1 |> Seq.takeUntil (fun _ -> counts <- counts + 1; true) |> Seq.head |> should equal 1
+    counts |> should equal 0
 
 [<Fact>]
 let ``if a list is empty takeUntil returns an empty list`` () =
-    let list = List.empty |> List.takeUntil (fun x -> x = 0)
-    Assert.Empty list
+    List.empty |> List.takeUntil zero |> shouldBeEmpty
 
 [<Fact>]
 let ``if a list has no matching elements takeUntil returns the full list`` () =
-    let list = [ 1..10 ] |> List.takeUntil (fun x -> x = 0)
-    Assert.True([ 1..10 ] = list)
+    [ 1..10 ] |> List.takeUntil zero |> should equal [ 1..10 ]
 
 [<Fact>]
 let ``if a list has matching element at the end takeUntil returns the full list`` () =
-    let list = [ 1..10 ] |> List.takeUntil (fun x -> x = 10)
-    Assert.True([ 1..10 ] = list)
+    [ 1..10 ] |> List.takeUntil ten |> should equal [ 1..10 ]
 
 [<Fact>]
 let ``if a list has matching element in the middle takeUntil returns a list including matching element`` () =
-    let list = [ 1..10 ] |> List.takeUntil (fun x -> x = 5)
-    Assert.True([ 1..5 ] = list)
+    [ 1..10 ] |> List.takeUntil five |> should equal [ 1..5 ]
 
 [<Fact>]
 let ``if a list has matching element at the start takeUntil returns the fist element`` () =
-    let list = [ 1..10 ] |> List.takeUntil (fun x -> x = 1)
-    Assert.True([ 1 ] = list)
+    [ 1..10 ] |> List.takeUntil one |> should equal [ 1 ]
 
 [<Fact>]
 let ``if an array is empty takeUntil returns an empty array`` () =
-    let array = Array.empty |> Array.takeUntil (fun x -> x = 0)
-    Assert.Empty array
+    Array.empty |> Array.takeUntil zero |> shouldBeEmpty
 
 [<Fact>]
 let ``if an array has no matching elements takeUntil returns the full array`` () =
-    let array = [| 1..10 |] |> Array.takeUntil (fun x -> x = 0)
-    Assert.True([| 1..10 |] = array)
+    [| 1..10 |] |> Array.takeUntil zero |> should equal [| 1..10 |]
 
 [<Fact>]
 let ``if an array has matching element at the end takeUntil returns the full array`` () =
-    let array = [| 1..10 |] |> Array.takeUntil (fun x -> x = 10)
-    Assert.True([| 1..10 |] = array)
+    [| 1..10 |] |> Array.takeUntil ten |> should equal [| 1..10 |]
 
 [<Fact>]
 let ``if an array has matching element in the middle takeUntil returns an array including matching element`` () =
-    let array = [| 1..10 |] |> Array.takeUntil (fun x -> x = 5)
-    Assert.True([| 1..5 |] = array)
+    [| 1..10 |] |> Array.takeUntil five |> should equal [| 1..5 |]
 
 [<Fact>]
 let ``if an array has matching element at the start takeUntil returns the fist element`` () =
-    let array = [| 1..10 |] |> Array.takeUntil (fun x -> x = 1)
-    Assert.True([| 1 |] = array)
+    [| 1..10 |] |> Array.takeUntil one |> should equal [| 1 |]
 
-[<Fact>]
-let ``property-based test: sequence agrees with list model`` () =
-    let pred (x : int) = x % 2 = 0
-    let property (xs : int list) =
-        xs
-        |> Seq.takeUntil pred
-        |> Seq.toList
-        |> (=) (List.takeUntil pred xs)
+[<Property>]
+let ``property-based test: sequence agrees with list model`` (xs: int list) =
+    xs |> Seq.takeUntil even |> Seq.toList |> (=) (List.takeUntil even xs)
 
-    FsCheck.Check.QuickThrowOnFailure property
-
-[<Fact>]
-let ``property-based test: sequence agrees with array model`` () =
-    let pred (x : int) = x % 2 = 0
-    let property (xs : FsCheck.NonNull<int[]>) =
-        let xs = xs.Get
-        xs
-        |> Seq.takeUntil pred
-        |> Seq.toArray
-        |> (=) (Array.takeUntil pred xs)
-
-    FsCheck.Check.QuickThrowOnFailure property
+[<Property>]
+let ``property-based test: sequence agrees with array model`` (xs: FsCheck.NonNull<int[]>) =
+    let xs = xs.Get
+    xs |> Seq.takeUntil even |> Seq.toArray |> (=) (Array.takeUntil even xs)
